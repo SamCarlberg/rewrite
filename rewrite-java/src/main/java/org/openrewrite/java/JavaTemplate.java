@@ -276,9 +276,14 @@ public class JavaTemplate implements SourceTemplate<J, JavaCoordinates> {
 
             @Override
             public J visitExpression(Expression expression, Integer p) {
-                if (loc.equals(EXPRESSION_PREFIX) && expression.isScope(insertionPoint)) {
+                if ((loc.equals(EXPRESSION_PREFIX) || loc.equals(STATEMENT_PREFIX)) && expression.isScope(insertionPoint)) {
+                    System.out.println("Replacing expression: " + expression + ", with template: " + substitutedTemplate);
                     return autoFormat(substitutions.unsubstitute(templateParser.parseExpression(substitutedTemplate))
                             .withPrefix(expression.getPrefix()), p);
+                } else {
+                    System.out.println("Not replacing expression: " + expression + "; p=" + p);
+                    System.out.println("  loc = " + loc);
+                    System.out.println("  isScope = " + expression.isScope(insertionPoint));
                 }
                 return expression;
             }

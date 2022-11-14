@@ -600,7 +600,7 @@ public final class ControlFlow {
                 }
             };
 
-            J.MethodInvocation fakeConditionalMethod = createFakeConditionalMethod(forLoop.getControl().getIterable());
+            final Expression fakeConditionalMethod = createFakeConditionalMethod(forLoop.getControl().getIterable());
             visit(fakeConditionalMethod, p);
 
             ControlFlowNode.ConditionNode conditionalEntry = controlAnalysis.currentAsBasicBlock().addConditionNodeTruthFirst();
@@ -613,14 +613,14 @@ public final class ControlFlow {
             return forLoop;
         }
 
-        private J.MethodInvocation createFakeConditionalMethod(Expression iterable) {
+        private Expression createFakeConditionalMethod(Expression iterable) {
             JavaTemplate fakeConditionalTemplate = iterable.getType() instanceof JavaType.Array ?
                     JavaTemplate.builder(this::getCursor, "Arrays.asList(#{any()}).iterator().hasNext()")
                             .imports("java.util.Arrays")
                             .build() :
                     JavaTemplate.builder(this::getCursor, "#{any(java.lang.Iterable)}.iterator().hasNext()").build();
             JavaCoordinates coordinates = iterable.getCoordinates().replace();
-            J.MethodInvocation fakeConditional = iterable.withTemplate(fakeConditionalTemplate, coordinates, iterable);
+            Expression fakeConditional = iterable.withTemplate(fakeConditionalTemplate, coordinates, iterable);
             if (iterable == fakeConditional) {
                 throw new IllegalStateException("Failed to create a fake conditional!");
             }

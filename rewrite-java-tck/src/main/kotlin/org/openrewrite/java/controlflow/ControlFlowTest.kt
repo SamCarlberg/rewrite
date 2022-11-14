@@ -15,7 +15,6 @@
  */
 package org.openrewrite.java.controlflow
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openrewrite.Issue
 import org.openrewrite.java.Assertions.java
@@ -2304,8 +2303,8 @@ interface ControlFlowTest : RewriteTest {
 
     @Test
     @Issue("https://github.com/openrewrite/rewrite/issues/2128")
-    @Disabled("This test is broken")
-    fun `ternary within the iterator for a for each loop`() = rewriteRun(
+//    @Disabled("This test is broken")
+    fun `ternary within the iterator of a for each loop`() = rewriteRun(
         java(
             """
             abstract class Test {
